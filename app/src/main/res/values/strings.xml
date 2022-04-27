@@ -11,4 +11,5 @@
     <string name="socks_protocol">SOCKS</string>
     <string name="http_protocol">HTTP</string>
     <string name="protocol_type">Protocol Type</string>
+    <string name="use_porxy">Use Porxy</string>
 </resources>

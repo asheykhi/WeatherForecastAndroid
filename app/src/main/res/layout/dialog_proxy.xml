@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="@dimen/content_padding_normal">
 
     <AutoCompleteTextView
+
         android:id="@+id/input_ip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/hint_proxy"
         android:imeOptions="actionNext"
-        android:inputType="text" />
+        android:inputType="text"
+        android:minHeight="48dp" />
 
     <Space
         android:layout_width="wrap_content"
@@ -23,7 +27,19 @@
         android:layout_height="wrap_content"
         android:hint="@string/hint_port"
         android:imeOptions="actionDone"
-        android:inputType="number" />
+        android:inputType="number"
+        android:minHeight="48dp" />
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="10dp" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/use_porxy"
+        android:theme="@style/Theme.MaterialComponents.DayNight.Bridge"
+        app:useMaterialThemeColors="true" />
 
     <Space
         android:layout_width="wrap_content"
@@ -32,16 +48,15 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/protocol_type" />
+        android:layout_gravity="center"
+        android:text="@string/protocol_type"
+        android:textSize="16sp" />
 
     <RadioGroup
         android:id="@+id/toggle"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="@dimen/content_padding_normal"
-        android:layout_marginRight="50dp"
-        android:layout_marginBottom="@dimen/content_padding_normal"
+        android:layout_height="45dp"
+        android:layout_margin="@dimen/content_padding_normal"
         android:background="@drawable/pink_out_line"
         android:checkedButton="@+id/offer"
         android:orientation="horizontal">

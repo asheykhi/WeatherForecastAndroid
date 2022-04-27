@@ -76,7 +76,7 @@ class WeatherActivity : AppCompatActivity() {
     private fun showAlertDialog() {
 
         val dialogLayout = LayoutInflater.from(applicationContext)
-            .inflate(R.layout.dialog_proxy,null )
+            .inflate(R.layout.dialog_proxy, null)
 
         AlertDialog.Builder(this)
             .setTitle("support: SOCKS / HTTP")
@@ -90,33 +90,4 @@ class WeatherActivity : AppCompatActivity() {
 
 
     }
-
-/*
-    private fun showAlertWithTextInputLayout(context: Context) {
-        val textInputLayout = TextInputLayout(context)
-        textInputLayout.setPadding(
-            resources.getDimensionPixelOffset(R.dimen.content_padding_normal), // if you look at android alert_dialog.xml, you will see the message textview have margin 14dp and padding 5dp. This is the reason why I use 19 here
-            0,
-            resources.getDimensionPixelOffset(R.dimen.content_padding_normal),
-            0
-        )
-        val input = EditText(context)
-        textInputLayout.hint = "Email"
-        textInputLayout.addView(input)
-
-        val alert = AlertDialog.Builder(context)
-            .setTitle("Reset Password")
-            .setView(textInputLayout)
-            .setMessage("Please enter your email address")
-            .setPositiveButton("Submit") { dialog, _ ->
-                // do some thing with input.text
-                dialog.cancel()
-            }
-            .setNegativeButton("Cancel") { dialog, _ ->
-                dialog.cancel()
-            }.create()
-
-        alert.show()
-    }
-*/
 }
