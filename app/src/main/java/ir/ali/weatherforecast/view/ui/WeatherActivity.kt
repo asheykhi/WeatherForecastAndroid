@@ -1,9 +1,13 @@
 package ir.ali.weatherforecast.view.ui
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.Menu
-import android.view.View.*
+import android.view.MenuItem
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
@@ -12,7 +16,6 @@ import ir.ali.weatherforecast.R
 import ir.ali.weatherforecast.databinding.ActivityWeatherBinding
 import ir.ali.weatherforecast.model.Weather
 import ir.ali.weatherforecast.view.viewModel.WeatherViewModel
-import java.lang.Exception
 
 @AndroidEntryPoint
 class WeatherActivity : AppCompatActivity() {
@@ -45,8 +48,15 @@ class WeatherActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.nav_menu, menu)
-        val menuItem = menu?.findItem(R.id.search_bar)
-        val searchView = menuItem?.actionView as SearchView
+        val searchMenuItem = menu?.findItem(R.id.search_bar)
+        val optionMenus = menu?.findItem(R.id.option_bar)
+
+        val searchView = searchMenuItem?.actionView as SearchView
+        val view: MenuItem = optionMenus?.subMenu?.getItem(0) as MenuItem
+        view.setOnMenuItemClickListener {
+            showAlertDialog()
+            true
+        }
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -62,4 +72,51 @@ class WeatherActivity : AppCompatActivity() {
         })
         return super.onCreateOptionsMenu(menu)
     }
+
+    private fun showAlertDialog() {
+
+        val dialogLayout = LayoutInflater.from(applicationContext)
+            .inflate(R.layout.dialog_proxy,null )
+
+        AlertDialog.Builder(this)
+            .setTitle("support: SOCKS / HTTP")
+            .setView(dialogLayout)
+            .setPositiveButton(android.R.string.ok) { p0, p1 ->
+            }
+            .setNegativeButton(android.R.string.cancel) { p0, p1 ->
+
+            }
+            .show()
+
+
+    }
+
+/*
+    private fun showAlertWithTextInputLayout(context: Context) {
+        val textInputLayout = TextInputLayout(context)
+        textInputLayout.setPadding(
+            resources.getDimensionPixelOffset(R.dimen.content_padding_normal), // if you look at android alert_dialog.xml, you will see the message textview have margin 14dp and padding 5dp. This is the reason why I use 19 here
+            0,
+            resources.getDimensionPixelOffset(R.dimen.content_padding_normal),
+            0
+        )
+        val input = EditText(context)
+        textInputLayout.hint = "Email"
+        textInputLayout.addView(input)
+
+        val alert = AlertDialog.Builder(context)
+            .setTitle("Reset Password")
+            .setView(textInputLayout)
+            .setMessage("Please enter your email address")
+            .setPositiveButton("Submit") { dialog, _ ->
+                // do some thing with input.text
+                dialog.cancel()
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.cancel()
+            }.create()
+
+        alert.show()
+    }
+*/
 }

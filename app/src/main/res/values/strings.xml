@@ -4,4 +4,11 @@
     <string name="click_to_fetch_data">click to Fetch Data</string>
     <string name="city_name">City Name</string>
     <string name="menu_search">search</string>
+    <string name="menu_option">Proxy Options</string>
+    <string name="hint_proxy">IP: 46.243.220.234</string>
+    <string name="hint_port">PORT: 8118</string>
+    <string name="help">help</string>
+    <string name="socks_protocol">SOCKS</string>
+    <string name="http_protocol">HTTP</string>
+    <string name="protocol_type">Protocol Type</string>
 </resources>
