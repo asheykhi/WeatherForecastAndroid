@@ -8,8 +8,15 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import ir.ali.weatherforecast.service.api.WeatherService
 import ir.ali.weatherforecast.utils.Constants.BASE_URL
+import ir.ali.weatherforecast.utils.Constants.PROXY_IP
+import ir.ali.weatherforecast.utils.Constants.PROXY_PORT
+import ir.ali.weatherforecast.utils.Constants.PROXY_TYPE
+import ir.ali.weatherforecast.utils.proxyStatus
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.net.InetSocketAddress
+import java.net.Proxy
 import javax.inject.Singleton
 
 @Module
@@ -25,9 +32,27 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideRetrofit(gson: Gson): Retrofit.Builder =
+    fun provideOkHttpClient(proxy: Proxy): OkHttpClient =
+        OkHttpClient.Builder()
+            .proxy(proxyStatus(proxy))
+            .build()
+
+    @Singleton
+    @Provides
+    fun provideProxy(socketAddress: InetSocketAddress,): Proxy =
+        Proxy(PROXY_TYPE, socketAddress)
+
+    @Singleton
+    @Provides
+    fun provideSocketAddress(): InetSocketAddress =
+        InetSocketAddress.createUnresolved(PROXY_IP, PROXY_PORT)
+
+    @Singleton
+    @Provides
+    fun provideRetrofit(gson: Gson, client: OkHttpClient): Retrofit.Builder =
         Retrofit.Builder()
             .baseUrl(BASE_URL)
+            .client(client)
             .addConverterFactory(GsonConverterFactory.create(gson))
 
     @Singleton
