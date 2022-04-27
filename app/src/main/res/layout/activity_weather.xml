@@ -23,7 +23,7 @@
             android:gravity="center"
             android:padding="10dp"
             android:paddingTop="200dp"
-            android:text="@string/loading" />
+            android:text="@string/todo" />
 
     </ScrollView>
 
