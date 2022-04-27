@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Weather Forecast Android</string>
+    <string name="loading">Loading Forecast data..</string>
 </resources>

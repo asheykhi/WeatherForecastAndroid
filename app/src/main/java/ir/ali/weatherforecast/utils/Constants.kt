@@ -1,5 +1,5 @@
 package ir.ali.weatherforecast.utils
 
-object Cosntants {
+object Constants {
     const val BASE_URL:String = "https://goweather.herokuapp.com/"
 }

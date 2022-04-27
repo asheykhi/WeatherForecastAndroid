@@ -7,7 +7,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import ir.ali.weatherforecast.service.api.WeatherService
-import ir.ali.weatherforecast.utils.Cosntants.BASE_URL
+import ir.ali.weatherforecast.utils.Constants.BASE_URL
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
