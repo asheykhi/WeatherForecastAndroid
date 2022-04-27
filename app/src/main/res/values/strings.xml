@@ -3,4 +3,5 @@
     <string name="loading">Enter City Name In EditText Below And Click Fetch Button</string>
     <string name="click_to_fetch_data">click to Fetch Data</string>
     <string name="city_name">City Name</string>
+    <string name="menu_search">search</string>
 </resources>
