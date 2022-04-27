@@ -22,11 +22,11 @@ class WeatherViewModel @Inject constructor(private val weatherRepository: Weathe
     private val _error: MutableLiveData<Exception> = MutableLiveData()
     val error: LiveData<Exception> get() = _error
 
-    fun loadWeatherForecastData() {
+    fun loadWeatherForecastData(cityName:String) {
         viewModelScope.launch {
             _loading.value = true
             try {
-                _weather.value = weatherRepository.getWeather()
+                _weather.value = weatherRepository.getWeather(cityName)
             } catch (e: Exception) {
                 _error.value = e
                 e.printStackTrace()

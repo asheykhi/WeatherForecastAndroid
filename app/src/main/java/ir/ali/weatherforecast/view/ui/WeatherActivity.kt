@@ -26,13 +26,19 @@ class WeatherActivity : AppCompatActivity() {
     private val loadingObserver = Observer<Boolean> {
         binding.progressBar.visibility = if (it) VISIBLE else INVISIBLE
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityWeatherBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupObservers(viewModel)
-        viewModel.loadWeatherForecastData()
+
+        binding.fetchBtn.setOnClickListener {
+            viewModel.loadWeatherForecastData(binding.tfCityName.text.toString())
+        }
     }
+
+
     private fun setupObservers(viewModel: WeatherViewModel) {
         viewModel.error.observe(this, errorObserver)
         viewModel.weather.observe(this, dataObserver)
