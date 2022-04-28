@@ -11,5 +11,11 @@
     <string name="socks_protocol">SOCKS</string>
     <string name="http_protocol">HTTP</string>
     <string name="protocol_type">Protocol Type</string>
-    <string name="use_porxy">Use Porxy</string>
+    <string name="use_proxy">Use Proxy</string>
+    <string name="today">sunday</string>
+    <string name="wind_speed">wind speed</string>
+    <string name="description">Partly Cloudy</string>
+    <string name="temperature">15°c</string>
+    <string name="not_found">NOT FOUND!</string>
 </resources>
+

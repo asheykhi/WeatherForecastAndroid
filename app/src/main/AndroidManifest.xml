@@ -14,6 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WeatherForecastAndroid">
         <activity
+            android:windowSoftInputMode="stateVisible|adjustPan"
             android:name=".view.ui.WeatherActivity"
             android:exported="true">
             <intent-filter>

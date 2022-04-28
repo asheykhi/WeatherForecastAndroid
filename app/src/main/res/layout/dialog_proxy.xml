@@ -38,7 +38,7 @@
         android:id="@+id/proxy_toggle_switch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/use_porxy"
+        android:text="@string/use_proxy"
         android:theme="@style/Theme.MaterialComponents.DayNight.Bridge"
         app:useMaterialThemeColors="true" />
 

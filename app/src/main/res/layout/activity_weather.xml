@@ -4,40 +4,70 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.ui.WeatherActivity">
-
-    <ScrollView
-        android:id="@+id/scrollView2"
+    android:background="@drawable/wall_4">
+    <FrameLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:theme="@style/Theme.WeatherForecastAndroid"
+        android:layout_height="0dp"
+        android:background="#83585858"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-
-        <TextView
-            android:id="@+id/textView"
+        app:layout_constraintTop_toTopOf="parent" >
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/linear_404"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="10dp"
-            android:paddingTop="200dp"
-            android:text="@string/todo" />
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            tools:ignore="UseCompoundDrawables,UselessParent">
+            <ImageView
+                android:layout_gravity="center"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@android:drawable/stat_notify_error"
+                tools:ignore="ContentDescription" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textStyle="bold|italic"
+                android:text="@string/not_found"
+                android:textColor="@color/white"
+                android:textSize="50sp" />
+        </LinearLayout>
+    </FrameLayout>
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        tools:context=".view.ui.WeatherActivity">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/root_constraint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/progressBar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                app:indeterminateAnimationType="contiguous"
+                app:indicatorColor="@array/progress_colors"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <include
+                android:id="@+id/container"
+                layout="@layout/layout_container" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
