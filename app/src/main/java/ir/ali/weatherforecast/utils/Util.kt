@@ -1,6 +1,9 @@
 package ir.ali.weatherforecast.utils
 
+import android.util.Range
 import ir.ali.weatherforecast.R
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 fun getWall(desc: String): Int = when (desc) {
@@ -16,4 +19,16 @@ fun getWall(desc: String): Int = when (desc) {
     "Thundery outbreaks possible" -> R.drawable.wall_9
     "Windy" -> R.drawable.wall_10
     else -> R.drawable.wall_10
+}
+
+fun getDaysArray(): ArrayList<String> {
+    val sdf = SimpleDateFormat("EEEE dd-MMM-yyyy", Locale.getDefault())
+    val d = arrayListOf<String>()
+    for (i in 1..3) {
+        val calendar: Calendar = GregorianCalendar()
+        calendar.add(Calendar.DATE, i)
+        val day: String = sdf.format(calendar.time)
+        d.add(day)
+    }
+    return d
 }

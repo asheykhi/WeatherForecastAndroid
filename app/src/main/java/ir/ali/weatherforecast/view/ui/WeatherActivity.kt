@@ -24,8 +24,10 @@ import ir.ali.weatherforecast.databinding.ActivityWeatherBinding
 import ir.ali.weatherforecast.model.Weather
 import ir.ali.weatherforecast.utils.Constants
 import ir.ali.weatherforecast.utils.DialogAppear
+import ir.ali.weatherforecast.utils.getDaysArray
 import ir.ali.weatherforecast.utils.getWall
 import ir.ali.weatherforecast.view.viewModel.WeatherViewModel
+import java.text.SimpleDateFormat
 import java.util.*
 
 @AndroidEntryPoint
@@ -50,6 +52,15 @@ class WeatherActivity : AppCompatActivity(), DialogAppear {
         val currentTime: Date = Calendar.getInstance().time
         val s = android.text.format.DateFormat.format("EEEE", currentTime)
 
+        val days = getDaysArray()
+
+        /*binding.container.included.tvForecastDay1.text = weather.forecast[0].day
+        binding.container.included.tvForecastDay2.text = weather.forecast[1].day
+        binding.container.included.tvForecastDay3.text = weather.forecast[2].day*/
+
+        binding.container.included.tvForecastDay1.text = days[0]
+        binding.container.included.tvForecastDay2.text = days[1]
+        binding.container.included.tvForecastDay3.text = days[2]
         binding.container.tvToday.text = s
 
         binding.container.included.tvForecastTemp1.text = weather.forecast[0].temp
