@@ -1,5 +1,7 @@
 package ir.ali.weatherforecast.view.ui
 
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.TransitionDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -12,17 +14,19 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import com.google.android.material.switchmaterial.SwitchMaterial
 import dagger.hilt.android.AndroidEntryPoint
 import ir.ali.weatherforecast.R
-import ir.ali.weatherforecast.utils.DialogAppear
 import ir.ali.weatherforecast.databinding.ActivityWeatherBinding
 import ir.ali.weatherforecast.model.Weather
 import ir.ali.weatherforecast.utils.Constants
+import ir.ali.weatherforecast.utils.DialogAppear
+import ir.ali.weatherforecast.utils.getWall
 import ir.ali.weatherforecast.view.viewModel.WeatherViewModel
-import java.net.Proxy
+import java.util.*
 
 @AndroidEntryPoint
 class WeatherActivity : AppCompatActivity(), DialogAppear {
@@ -32,10 +36,39 @@ class WeatherActivity : AppCompatActivity(), DialogAppear {
     private lateinit var inputIpWidget: AutoCompleteTextView
     private lateinit var inputPortWidget: AutoCompleteTextView
     private lateinit var proxyUsageToggleWidget: SwitchMaterial
-    private lateinit var proxyTypeWidget : RadioGroup
+    private lateinit var proxyTypeWidget: RadioGroup
 
-    private val dataObserver = Observer<Weather> {
-        binding.textView.text = it.toString()
+    private val dataObserver = Observer<Weather> { weather ->
+
+        setUiVisibilities(true)
+
+        binding.container.tvTemperature.text = weather.temp
+        binding.container.tvDescription.text = weather.desc
+        binding.container.tvWind.text = weather.wind
+
+        /** can provide by di */
+        val currentTime: Date = Calendar.getInstance().time
+        val s = android.text.format.DateFormat.format("EEEE", currentTime)
+
+        binding.container.tvToday.text = s
+
+        binding.container.included.tvForecastTemp1.text = weather.forecast[0].temp
+        binding.container.included.tvForecastTemp2.text = weather.forecast[1].temp
+        binding.container.included.tvForecastTemp3.text = weather.forecast[2].temp
+
+        binding.container.included.tvForecastWind1.text = weather.forecast[0].wind
+        binding.container.included.tvForecastWind2.text = weather.forecast[1].wind
+        binding.container.included.tvForecastWind3.text = weather.forecast[2].wind
+
+
+        val currentBG: Drawable? = binding.root.background
+        val resId = getWall(weather.desc)
+        val nextBG: Drawable? = AppCompatResources.getDrawable(this, resId)
+        val array = arrayOf(currentBG, nextBG)
+        val transition = TransitionDrawable(array)
+        binding.root.background = transition
+        transition.startTransition(1500)
+
     }
     private val loadingObserver = Observer<Boolean> {
         binding.progressBar.visibility = if (it) VISIBLE else INVISIBLE
@@ -49,6 +82,7 @@ class WeatherActivity : AppCompatActivity(), DialogAppear {
         binding = ActivityWeatherBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupObservers(viewModel)
+        setUiVisibilities(false)
     }
 
     /** This dialog will provide by di in future */
@@ -90,6 +124,11 @@ class WeatherActivity : AppCompatActivity(), DialogAppear {
         viewModel.notifyUser.observe(this, userNotifier)
     }
 
+    private fun setUiVisibilities(flag: Boolean) {
+        val visibility = if (flag) VISIBLE else INVISIBLE
+        binding.container.root.visibility = visibility
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.nav_menu, menu)
         val searchMenuItem = menu?.findItem(R.id.search_bar)
@@ -107,6 +146,8 @@ class WeatherActivity : AppCompatActivity(), DialogAppear {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 viewModel.loadWeatherForecastData(query.toString())
+                binding.container.tvLocation.text = query.toString()
+                searchView.clearFocus()
                 return true
             }
 

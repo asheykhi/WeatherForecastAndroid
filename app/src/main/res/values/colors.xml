@@ -7,4 +7,12 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <integer-array name="progress_colors">
+        <item>@color/teal_200</item>
+        <item>@color/purple_500</item>
+        <item>@color/teal_700</item>
+        <item>@color/purple_700</item>
+    </integer-array>
+
 </resources>
