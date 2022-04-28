@@ -1,5 +1,6 @@
 package ir.ali.weatherforecast.di
 
+import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -8,10 +9,10 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import ir.ali.weatherforecast.service.api.WeatherService
 import ir.ali.weatherforecast.utils.Constants.BASE_URL
-import ir.ali.weatherforecast.utils.Constants.PROXY_IP
-import ir.ali.weatherforecast.utils.Constants.PROXY_PORT
-import ir.ali.weatherforecast.utils.Constants.PROXY_TYPE
-import ir.ali.weatherforecast.utils.proxyStatus
+import ir.ali.weatherforecast.utils.Constants.DEFAULT_PROXY_IP
+import ir.ali.weatherforecast.utils.Constants.DEFAULT_PROXY_PORT
+import ir.ali.weatherforecast.utils.Constants.DEFAULT_PROXY_STATUS_USAGE
+import ir.ali.weatherforecast.utils.Constants.DEFAULT_PROXY_TYPE
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -32,20 +33,32 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideOkHttpClient(proxy: Proxy): OkHttpClient =
-        OkHttpClient.Builder()
-            .proxy(proxyStatus(proxy))
+    fun provideOkHttpClient(proxy: Proxy, shp: SharedPreferences): OkHttpClient {
+        val flag = shp.getBoolean("local_sts", DEFAULT_PROXY_STATUS_USAGE)
+        return OkHttpClient.Builder()
+            .proxy(if (flag) proxy else Proxy.NO_PROXY)
             .build()
+    }
 
     @Singleton
     @Provides
-    fun provideProxy(socketAddress: InetSocketAddress,): Proxy =
-        Proxy(PROXY_TYPE, socketAddress)
+    fun provideProxy(socketAddress: InetSocketAddress, proxyType: Proxy.Type): Proxy =
+        Proxy(proxyType, socketAddress)
 
     @Singleton
     @Provides
-    fun provideSocketAddress(): InetSocketAddress =
-        InetSocketAddress.createUnresolved(PROXY_IP, PROXY_PORT)
+    fun provideProxyType(shp: SharedPreferences): Proxy.Type =
+        if (shp.getString("local_type", DEFAULT_PROXY_TYPE).equals(DEFAULT_PROXY_TYPE)
+        ) Proxy.Type.HTTP else Proxy.Type.SOCKS
+
+
+    @Singleton
+    @Provides
+    fun provideSocketAddress(shp: SharedPreferences): InetSocketAddress {
+        val ip = shp.getString("local_ip", DEFAULT_PROXY_IP)
+        val port = shp.getInt("local_port", DEFAULT_PROXY_PORT)
+        return InetSocketAddress.createUnresolved(ip, port)
+    }
 
     @Singleton
     @Provides

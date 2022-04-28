@@ -35,6 +35,7 @@
         android:layout_height="10dp" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/proxy_toggle_switch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/use_porxy"
@@ -58,11 +59,11 @@
         android:layout_height="45dp"
         android:layout_margin="@dimen/content_padding_normal"
         android:background="@drawable/pink_out_line"
-        android:checkedButton="@+id/offer"
+        android:checkedButton="@+id/rb_http"
         android:orientation="horizontal">
 
         <RadioButton
-            android:id="@+id/search"
+            android:id="@+id/rb_socks"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="1dp"
@@ -76,7 +77,7 @@
             android:textColor="@color/white" />
 
         <RadioButton
-            android:id="@+id/offer"
+            android:id="@+id/rb_http"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginTop="1dp"
