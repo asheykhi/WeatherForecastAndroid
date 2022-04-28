@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.AutoCompleteTextView
@@ -27,7 +28,6 @@ import ir.ali.weatherforecast.utils.DialogAppear
 import ir.ali.weatherforecast.utils.getDaysArray
 import ir.ali.weatherforecast.utils.getWall
 import ir.ali.weatherforecast.view.viewModel.WeatherViewModel
-import java.text.SimpleDateFormat
 import java.util.*
 
 @AndroidEntryPoint
@@ -42,43 +42,49 @@ class WeatherActivity : AppCompatActivity(), DialogAppear {
 
     private val dataObserver = Observer<Weather> { weather ->
 
-        setUiVisibilities(true)
+        if (weather.desc.isNotEmpty()) {
+            setUiVisibilities(true)
 
-        binding.container.tvTemperature.text = weather.temp
-        binding.container.tvDescription.text = weather.desc
-        binding.container.tvWind.text = weather.wind
+            binding.container.tvTemperature.text = weather.temp
+            binding.container.tvDescription.text = weather.desc
+            binding.container.tvWind.text = weather.wind
 
-        /** can provide by di */
-        val currentTime: Date = Calendar.getInstance().time
-        val s = android.text.format.DateFormat.format("EEEE", currentTime)
+            /** can provide by di */
+            val currentTime: Date = Calendar.getInstance().time
+            val s = android.text.format.DateFormat.format("EEEE", currentTime)
 
-        val days = getDaysArray()
+            val days = getDaysArray()
 
-        /*binding.container.included.tvForecastDay1.text = weather.forecast[0].day
-        binding.container.included.tvForecastDay2.text = weather.forecast[1].day
-        binding.container.included.tvForecastDay3.text = weather.forecast[2].day*/
+            /*binding.container.included.tvForecastDay1.text = weather.forecast[0].day
+            binding.container.included.tvForecastDay2.text = weather.forecast[1].day
+            binding.container.included.tvForecastDay3.text = weather.forecast[2].day*/
 
-        binding.container.included.tvForecastDay1.text = days[0]
-        binding.container.included.tvForecastDay2.text = days[1]
-        binding.container.included.tvForecastDay3.text = days[2]
-        binding.container.tvToday.text = s
+            binding.container.included.tvForecastDay1.text = days[0]
+            binding.container.included.tvForecastDay2.text = days[1]
+            binding.container.included.tvForecastDay3.text = days[2]
+            binding.container.tvToday.text = s
 
-        binding.container.included.tvForecastTemp1.text = weather.forecast[0].temp
-        binding.container.included.tvForecastTemp2.text = weather.forecast[1].temp
-        binding.container.included.tvForecastTemp3.text = weather.forecast[2].temp
+            binding.container.included.tvForecastTemp1.text = weather.forecast[0].temp
+            binding.container.included.tvForecastTemp2.text = weather.forecast[1].temp
+            binding.container.included.tvForecastTemp3.text = weather.forecast[2].temp
 
-        binding.container.included.tvForecastWind1.text = weather.forecast[0].wind
-        binding.container.included.tvForecastWind2.text = weather.forecast[1].wind
-        binding.container.included.tvForecastWind3.text = weather.forecast[2].wind
+            binding.container.included.tvForecastWind1.text = weather.forecast[0].wind
+            binding.container.included.tvForecastWind2.text = weather.forecast[1].wind
+            binding.container.included.tvForecastWind3.text = weather.forecast[2].wind
 
 
-        val currentBG: Drawable? = binding.root.background
-        val resId = getWall(weather.desc)
-        val nextBG: Drawable? = AppCompatResources.getDrawable(this, resId)
-        val array = arrayOf(currentBG, nextBG)
-        val transition = TransitionDrawable(array)
-        binding.root.background = transition
-        transition.startTransition(1500)
+            val currentBG: Drawable? = binding.root.background
+            val resId = getWall(weather.desc)
+            val nextBG: Drawable? = AppCompatResources.getDrawable(this, resId)
+            val array = arrayOf(currentBG, nextBG)
+            val transition = TransitionDrawable(array)
+            binding.root.background = transition
+            transition.startTransition(1500)
+        }else {
+            notifyUser(" Not Found !")
+            setUiVisibilities(false)
+
+        }
 
     }
     private val loadingObserver = Observer<Boolean> {
@@ -136,8 +142,8 @@ class WeatherActivity : AppCompatActivity(), DialogAppear {
     }
 
     private fun setUiVisibilities(flag: Boolean) {
-        val visibility = if (flag) VISIBLE else INVISIBLE
-        binding.container.root.visibility = visibility
+        binding.container.root.visibility = if (flag) VISIBLE else INVISIBLE
+        binding.linear404.visibility = if (!flag) VISIBLE else INVISIBLE
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

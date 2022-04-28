@@ -16,5 +16,6 @@
     <string name="wind_speed">wind speed</string>
     <string name="description">Partly Cloudy</string>
     <string name="temperature">15°c</string>
+    <string name="not_found">NOT FOUND!</string>
 </resources>
 
