@@ -19,6 +19,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import com.google.android.material.switchmaterial.SwitchMaterial
+import com.jakewharton.processphoenix.ProcessPhoenix
 import dagger.hilt.android.AndroidEntryPoint
 import ir.ali.weatherforecast.R
 import ir.ali.weatherforecast.databinding.ActivityWeatherBinding
@@ -29,6 +30,7 @@ import ir.ali.weatherforecast.utils.getDaysArray
 import ir.ali.weatherforecast.utils.getWall
 import ir.ali.weatherforecast.view.viewModel.WeatherViewModel
 import java.util.*
+
 
 @AndroidEntryPoint
 class WeatherActivity : AppCompatActivity(), DialogAppear {
@@ -52,12 +54,8 @@ class WeatherActivity : AppCompatActivity(), DialogAppear {
             /** can provide by di */
             val currentTime: Date = Calendar.getInstance().time
             val s = android.text.format.DateFormat.format("EEEE", currentTime)
-
             val days = getDaysArray()
 
-            /*binding.container.included.tvForecastDay1.text = weather.forecast[0].day
-            binding.container.included.tvForecastDay2.text = weather.forecast[1].day
-            binding.container.included.tvForecastDay3.text = weather.forecast[2].day*/
 
             binding.container.included.tvForecastDay1.text = days[0]
             binding.container.included.tvForecastDay2.text = days[1]
@@ -73,14 +71,16 @@ class WeatherActivity : AppCompatActivity(), DialogAppear {
             binding.container.included.tvForecastWind3.text = weather.forecast[2].wind
 
 
-            val currentBG: Drawable? = binding.root.background
+            val currentBG: Drawable? =
+                binding.root.background ?: AppCompatResources.getDrawable(this, R.drawable.wall_0)
             val resId = getWall(weather.desc)
             val nextBG: Drawable? = AppCompatResources.getDrawable(this, resId)
             val array = arrayOf(currentBG, nextBG)
             val transition = TransitionDrawable(array)
             binding.root.background = transition
             transition.startTransition(1500)
-        }else {
+            binding.descIntro.visibility = View.INVISIBLE
+        } else {
             notifyUser(" Not Found !")
             setUiVisibilities(false)
 
@@ -124,8 +124,11 @@ class WeatherActivity : AppCompatActivity(), DialogAppear {
                         proxyUsageToggleWidget.isChecked,
                         if (proxyTypeWidget.checkedRadioButtonId == R.id.rb_http) "HTTP" else "SOCKS"
                     )
+
+                    showConfirmDialog();
+
                 } else {
-                    notifyUser("please fill all fields ")
+                    notifyUser("please fill all fields")
                 }
             }
             .setNegativeButton(android.R.string.cancel) { dI, _ ->
@@ -135,6 +138,29 @@ class WeatherActivity : AppCompatActivity(), DialogAppear {
 
     }
 
+    private fun showConfirmDialog() {
+        AlertDialog.Builder(this).apply {
+            setTitle("Notice")
+                .setMessage(
+                    "According to using Hilt Di when using '@InstallIn(SingletonComponent::class)'\n" +
+                            "for our modules; The Singleton object create just when Application start " +
+                            "in other word in this case the instance provide as singleton just one time " +
+                            "in Application lifecycle, So select 'Confirm' to Restart the Application to " +
+                            "provide new instance with your proxy options by Hilt "
+                )
+                .setCancelable(false)
+                .setIcon(android.R.drawable.ic_menu_info_details)
+                .setPositiveButton("Confirm") { _, _ -> restartApp() }
+                .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
+                .show()
+        }.create()
+    }
+
+    private fun restartApp() {
+        ProcessPhoenix.triggerRebirth(applicationContext);
+    }
+
+
     private fun setupObservers(viewModel: WeatherViewModel) {
         viewModel.weather.observe(this, dataObserver)
         viewModel.loading.observe(this, loadingObserver)
@@ -143,7 +169,6 @@ class WeatherActivity : AppCompatActivity(), DialogAppear {
 
     private fun setUiVisibilities(flag: Boolean) {
         binding.container.root.visibility = if (flag) VISIBLE else INVISIBLE
-        binding.linear404.visibility = if (!flag) VISIBLE else INVISIBLE
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -164,6 +189,7 @@ class WeatherActivity : AppCompatActivity(), DialogAppear {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 viewModel.loadWeatherForecastData(query.toString())
                 binding.container.tvLocation.text = query.toString()
+                binding.descIntro.text = "fetching ${query.toString()} forecast data.."
                 searchView.clearFocus()
                 return true
             }
@@ -177,6 +203,7 @@ class WeatherActivity : AppCompatActivity(), DialogAppear {
 
     private fun notifyUser(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+        binding.descIntro.text = message
     }
 
     override fun onDialogAppeared(ip: String?, port: Int?, status: Boolean?, type: String?) {

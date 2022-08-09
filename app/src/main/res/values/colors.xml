@@ -7,6 +7,8 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="grey1">#292727</color>
+    <color name="grey2">#211E1E</color>
 
     <integer-array name="progress_colors">
         <item>@color/teal_200</item>

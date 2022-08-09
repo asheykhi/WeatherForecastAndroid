@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import ir.ali.weatherforecast.utils.DialogAppear
 import ir.ali.weatherforecast.model.Weather
 import ir.ali.weatherforecast.service.repository.ProxyRepository
 import ir.ali.weatherforecast.service.repository.WeatherRepository
@@ -13,6 +12,7 @@ import ir.ali.weatherforecast.utils.Constants.DEFAULT_PROXY_IP
 import ir.ali.weatherforecast.utils.Constants.DEFAULT_PROXY_PORT
 import ir.ali.weatherforecast.utils.Constants.DEFAULT_PROXY_STATUS_USAGE
 import ir.ali.weatherforecast.utils.Constants.DEFAULT_PROXY_TYPE
+import ir.ali.weatherforecast.utils.DialogAppear
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,7 +20,9 @@ import javax.inject.Inject
 class WeatherViewModel @Inject constructor(
     private val weatherRepository: WeatherRepository,
     private val proxyRepo: ProxyRepository
-    ) : ViewModel() {
+) : ViewModel() {
+
+    private var usage = false
 
     private val _notifyUser: MutableLiveData<String> = MutableLiveData()
     val notifyUser: LiveData<String> get() = _notifyUser
@@ -32,7 +34,7 @@ class WeatherViewModel @Inject constructor(
     val loading: LiveData<Boolean> get() = _loading
 
 
-    fun updateLocalProxyData(ip: String, port: Int,status:Boolean, type:String) {
+    fun updateLocalProxyData(ip: String, port: Int, status: Boolean, type: String) {
         viewModelScope.launch {
             try {
                 proxyRepo.getLocalProxyData().edit().putString("local_ip", ip).apply()
@@ -54,7 +56,8 @@ class WeatherViewModel @Inject constructor(
             try {
                 val ip = proxyRepo.getLocalProxyData().getString("local_ip", DEFAULT_PROXY_IP)
                 val port = proxyRepo.getLocalProxyData().getInt("local_port", DEFAULT_PROXY_PORT)
-                val usage = proxyRepo.getLocalProxyData().getBoolean("local_sts", DEFAULT_PROXY_STATUS_USAGE)
+                usage = proxyRepo.getLocalProxyData()
+                    .getBoolean("local_sts", DEFAULT_PROXY_STATUS_USAGE)
                 val type = proxyRepo.getLocalProxyData().getString("local_type", DEFAULT_PROXY_TYPE)
                 dialogAppear.onDialogAppeared(ip, port, usage, type)
             } catch (e: Exception) {
@@ -71,7 +74,8 @@ class WeatherViewModel @Inject constructor(
                 _weather.value = weatherRepository.getWeather(cityName)
             } catch (e: Exception) {
                 e.printStackTrace()
-                _notifyUser.value = e.message
+                usage = proxyRepo.getLocalProxyData().getBoolean("local_sts", DEFAULT_PROXY_STATUS_USAGE)
+                _notifyUser.value = if (usage) "${e.message}, use another proxy" else "${e.message}, you can enable proxy"
             } finally {
                 _loading.value = false
             }

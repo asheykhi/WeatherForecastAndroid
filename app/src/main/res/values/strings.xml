@@ -17,5 +17,6 @@
     <string name="description">Partly Cloudy</string>
     <string name="temperature">15°c</string>
     <string name="not_found">NOT FOUND!</string>
+    <string name="desc_intro">Enter area name in SearchView in toolbar to fetch Weather Forecast information </string>
 </resources>
 

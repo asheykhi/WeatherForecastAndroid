@@ -18,6 +18,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.net.InetSocketAddress
 import java.net.Proxy
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -37,6 +38,8 @@ object NetworkModule {
         val flag = shp.getBoolean("local_sts", DEFAULT_PROXY_STATUS_USAGE)
         return OkHttpClient.Builder()
             .proxy(if (flag) proxy else Proxy.NO_PROXY)
+            .connectTimeout(15000, TimeUnit.MILLISECONDS)
+            .callTimeout(15000, TimeUnit.MILLISECONDS)
             .build()
     }
 

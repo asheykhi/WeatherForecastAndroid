@@ -3,42 +3,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/wall_4">
+    android:layout_height="match_parent">
+
     <FrameLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="#83585858"
+        android:background="#837A7A7A"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
-        <LinearLayout
-            android:visibility="gone"
-            android:id="@+id/linear_404"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center"
-            tools:ignore="UseCompoundDrawables,UselessParent">
-            <ImageView
-                android:layout_gravity="center"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:src="@android:drawable/stat_notify_error"
-                tools:ignore="ContentDescription" />
+        app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:textStyle="bold|italic"
-                android:text="@string/not_found"
-                android:textColor="@color/white"
-                android:textSize="50sp" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/desc_intro"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:lineSpacingExtra="10dp"
+            android:padding="20dp"
+            android:text="@string/desc_intro"
+            android:textAlignment="center"
+            android:textColor="#171515"
+            android:textSize="24sp"
+            android:textStyle="italic"
+            android:typeface="serif"
+            android:visibility="visible" />
+
     </FrameLayout>
+
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
